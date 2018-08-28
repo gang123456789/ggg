@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    #box{width: 100px; height: 100px; background: #ff0000; position: absolute;}
+    </style>
+</head>
+<body>
+ <div id="box"></div>  
+ <script>
+ /*
+     * 1.块的当前位置 x0,y0
+     * 2.鼠标的当前位置(起点) x1,y1
+     * 3.鼠标的当前位置(终点) x2,y2
+     * 4.块的新坐标: x,y
+     *   x=(x2-x1)+x0
+     *   y=(y2-y1)+y0
+     *  只有css中posistion的left,top的值才能使移动, js中的各种距离offsetWidth,clientX等只能读取.
+     * */
+ var oDiv = document.getElementById("box");
+
+ oDiv.onmousedown = function(ev){//鼠标按下时得到:
+     var e = ev || event;
+    //1.块的当前位置: x0,y0
+    var x0 = this.offsetLeft;
+    var y0 = this.offsetTop;
+    // console.log(this.offsetLeft, this.offsetTop);
+    //2.鼠标的当前位置(起点): x1,y1
+    var x1 = e.clientX;
+    var y1 = e.clientY;
+   // console.log(e.clientX, e.clientY);
+
+//在整个浏览器内移动
+ document.onmousemove = function(ev){
+     var e = ev || event;
+     //鼠标终点位置: x2,y2
+     var x2 = e.clientX;
+     var y2 = e.clientY;
+    // console.log(e.clientX, e.clientY);
+
+    //块的有效活动范围,即可视区域(浏览器)的宽度和高度 clientWidth和clientHeight; 
+    //而 offsetWidth和offsetHeight指元素自身的宽度和高度
+    var oWidth = oDiv.offsetWidth;
+    var disX = document.documentElement.clientWidth-oWidth || document.body.clientWidth-oWidth;
+    var oHeight = oDiv.offsetHeight;
+    var disY = document.documentElement.clientHeight-oHeight || document.body.clientHeight-oHeight;
+    console.log(disX, disY);
+
+     //块的终点位置: x, y
+     x = x0+(x2-x1);
+     y = y0+(y2-y1);
+
+    //只允许块在可视区域内活动
+    if(x<0) x=0; //可视区域的左边
+    if(y<0) y=0; //可视区域的上边
+    if(x>disX) x=disX; //可视区域的右边
+    if(y>disY) y=disY; ////可视区域的下边 distance:距离
+
+     //块动画
+     oDiv.style.left = x+"px";
+     oDiv.style.top = y+"px";
+    // console.log(x, y);
+ }
+ 
+    //结束鼠标拖拽
+    oDiv.onmouseup = function(){
+        document.onmousemove = null;
+    }
+    return false;
+}
+ </script> 
+</body>
+</html>

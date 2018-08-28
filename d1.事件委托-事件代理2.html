@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+  <ul id="nav">
+      <li>001</li>
+      <li>002</li>
+      <li>003</li>
+      <li>004</li>
+      <li>005</li>
+      <li>006</li>
+  </ul>  
+<script>
+var oLi = document.getElementsByTagName("li");
+var oNav = document.getElementById("nav");
+
+//e.target 是真正的事件源
+//事件源 e.target: 当一个DOM对象调用事件时,这个事件源不一定是这个DOM对象. 例证如下:
+oNav.addEventListener('click', function(e){
+    var target = e.target || window.event.srcElement;
+    console.log(target.innerHTML);
+}, false);
+
+//二者等同:
+/* oNav.onclick = function(e){
+    console.log(e.target);
+} */
+
+/*
+1.事件委托/事件代理：利用事件冒泡把子元素的事件，统一委托给父元素去绑定。
+2.事件冒泡解决的问题： 很多子元素绑定同一个事件时，可使用事件冒泡，把子元素的事件委托给父元素绑定，即事件委托/事件代理
+*/
+
+/* for(var i=0; i<oLi.length; i++){
+    oLi[i].onclick = function(){
+        console.log(this);
+    }   
+} */
+</script>
+</body>
+</html>
